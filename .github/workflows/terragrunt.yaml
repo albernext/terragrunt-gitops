@@ -1,0 +1,58 @@
+name: 'Call Terragrunt workflow'
+
+on:
+  pull_request:
+    branches: [main]
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  call-terragrunt-workflow:
+    if: github.event_name == 'pull_request' || github.event.review.state == 'approved'
+    name: 'Call Terragrunt workflow'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.1.0
+        with:
+          fetch-depth: 0
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v35.7.11
+        with:
+          sha: ${{github.event.pull_request.head.sha}}
+          include_all_old_new_renamed_files: "true"
+
+      - name: Get token
+        id: app-token
+        uses: getsentry/action-github-app-token@v2.0.0
+        with:
+          app_id: ${{vars.IAC_ACTIONS_APP_ID}}
+          private_key: ${{secrets.IAC_ACTIONS_PRIVATE_KEY}}
+
+      - name: Run workflow
+        run: |
+          curl \
+          -s \
+          -X POST \
+          -H "Accept: application/vnd.github.v3+json" \
+          -H "Authorization: token ${{steps.app-token.outputs.token}}" \
+          https://api.github.com/repos/terragrunt-actions/dispatches \
+          --data @<(cat <<EOF
+          {
+            "event_type": "terragrunt",
+            "client_payload": {
+              "repo": "${{github.repository}}",
+              "all_changed_and_modified_files": "${{steps.changed-files.outputs.all_changed_and_modified_files}}",
+              "all_old_new_renamed_files": "${{steps.changed-files.outputs.all_old_new_renamed_files}}",
+              "event_name": "${{github.event_name}}",
+              "base_ref": "${{github.event.pull_request.base.ref}}",
+              "head_ref": "${{github.event.pull_request.head.ref}}",
+              "sha": "${{github.event.pull_request.head.sha}}",
+              "pull_request_number": "${{github.event.pull_request.number}}"
+            }
+          }
+          EOF
+          )
