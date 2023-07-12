@@ -30,6 +30,7 @@ provider "github" {
   owner = "albernext"
 }
 EOF
+}
 
 remote_state {
   backend = "s3"
