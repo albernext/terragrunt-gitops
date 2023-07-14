@@ -35,15 +35,16 @@ jobs:
       - name: Run workflow
         run: |
           curl \
-          -s \
-          -X POST \
-          -H "Accept: application/vnd.github.v3+json" \
-          -H "Authorization: token ${{steps.app-token.outputs.token}}" \
-          https://api.github.com/repos/albernext/terragrunt-actions/dispatches \
-          --data @<(cat <<EOF
+            -s \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{secrets.TERRAGRUNT_ACTIONS_GITHUB_TOKEN}}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/albernext/terragrunt-actions/actions/workflows/terragrunt.yaml/dispatches \
+            --data @<(cat <<EOF
           {
-            "event_type": "terragrunt",
-            "client_payload": {
+            "ref": "main",
+            "inputs": {
               "repo": "${{github.repository}}",
               "all_changed_and_modified_files": "${{steps.changed-files.outputs.all_changed_and_modified_files}}",
               "all_old_new_renamed_files": "${{steps.changed-files.outputs.all_old_new_renamed_files}}",
@@ -55,4 +56,4 @@ jobs:
             }
           }
           EOF
-          )
+            )
