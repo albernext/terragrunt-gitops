@@ -5,7 +5,7 @@ locals {
   account_id   = local.account_vars.locals.aws_account_id
   aws_region   = local.account_vars.locals.aws_region
 
-  workflow_path = "/home/runner/work/terragrunt-actions/terragrunt-gitops"
+  workflow_path = "/home/runner/work/terragrunt-actions/terragrunt-actions/terragrunt-gitops"
 }
 
 generate "provider" {
