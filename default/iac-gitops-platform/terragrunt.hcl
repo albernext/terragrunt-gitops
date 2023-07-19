@@ -20,6 +20,7 @@ dependency "infracost_api_key" {
 
 inputs = {
   initial_deploy                     = false
+  github_repository_visibility       = "public"
   tf_modules_github_teams            = ["devops"]
   tg_actions_github_teams            = ["devops"]
   tg_actions_repo_codeowners_file    = "files/_codeowners"
