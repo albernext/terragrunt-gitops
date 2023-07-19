@@ -29,6 +29,6 @@ inputs = {
   tg_automation_role_name            = "iac-gitops"
   state_bucket_name                  = "tf-state-963371085934"
   github_org                         = "albernext"
-  github_token                       = dependency.github_token.outputs.arn
-  infracost_api_key                  = dependency.infracost_api_key.outputs.arn
+  github_token_secret_arn            = dependency.github_token.outputs.arn
+  infracost_api_key_secret_arn       = dependency.infracost_api_key.outputs.arn
 }
