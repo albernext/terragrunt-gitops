@@ -15,8 +15,8 @@ dependency "github_token" {
 }
 
 inputs = {
-  repo                      = "docker-hello-world"
-  visibility                = "public"
-  github_teams              = "devops"
-  aws_secret_github_pat_arn = dependency.github_token.outputs.arn
+  repo                         = "docker-hello-world"
+  github_repository_visibility = "public"
+  github_teams                 = "devops"
+  aws_secret_github_pat_arn    = dependency.github_token.outputs.arn
 }
