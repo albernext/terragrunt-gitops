@@ -3,7 +3,7 @@ include "root" {
 }
 
 terraform {
-  source = "${local.module_source_url}?ref=v1"
+  source = "${local.module_source_url}?ref=v3"
 }
 
 locals {
