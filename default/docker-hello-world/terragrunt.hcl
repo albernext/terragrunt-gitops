@@ -3,7 +3,7 @@ include "root" {
 }
 
 terraform {
-  source = "${local.module_source_url}?ref=add-docker-image-repo"
+  source = "${local.module_source_url}?ref=v2"
 }
 
 locals {
